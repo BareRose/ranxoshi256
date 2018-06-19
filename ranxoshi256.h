@@ -38,7 +38,7 @@ struct ranxoshi256 {
 };
 
 //function declarations
-RSHI256DEF void ranxoshi256Seed(struct ranxoshi256*, unsigned char[32]);
+RSHI256DEF void ranxoshi256Seed(struct ranxoshi256*, const unsigned char[32]);
 RSHI256DEF float ranxoshi256FloatCO(struct ranxoshi256*);
 RSHI256DEF float ranxoshi256FloatCC(struct ranxoshi256*);
 RSHI256DEF double ranxoshi256DoubleCO(struct ranxoshi256*);
@@ -53,7 +53,7 @@ RSHI256DEF void ranxoshi256Jump(struct ranxoshi256*);
 static inline uint64_t ranxoshi256Rotate(uint64_t, int);
 
 //public functions
-RSHI256DEF void ranxoshi256Seed (struct ranxoshi256* ctx, unsigned char s[32]) {
+RSHI256DEF void ranxoshi256Seed (struct ranxoshi256* ctx, const unsigned char s[32]) {
     //pastes the given seed of 32 bytes into the generator's state in an endian-proof way
     //this allows for consistent results across machines with differing architectures
     for (int i = 0; i < 4; i++)
