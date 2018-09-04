@@ -116,7 +116,7 @@ RSHI256DEF void ranxoshi256Jump (struct ranxoshi256* ctx) {
 }
 
 //internal functions
-static inline uint64_t ranxoshi256Rotate (uint64_t x, int k) {
+static uint64_t ranxoshi256Rotate (uint64_t x, int k) {
     return (x << k) | (x >> (64 - k));
 }
 
