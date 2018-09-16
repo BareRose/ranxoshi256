@@ -17,7 +17,7 @@ ranxoshi256 supports the following three configurations:
     Defines all ranxoshi256 functions as static, useful if ranxoshi256 is only used in a single compilation unit.
 */
 
-//include only once
+//header section
 #ifndef RANXOSHI256_H
 #define RANXOSHI256_H
 
@@ -59,11 +59,14 @@ RSHI256DEF void ranxoshi256Jump(struct ranxoshi256*);
     //advances the given generator's internal state by 2^128 calls to ranxoshi256Next
     //useful for generating multiple non-overlapping subsequences from a single seed
 
+#endif //RANXOSHI256_H
+
 //implementation section
 #ifdef RANXOSHI256_IMPLEMENTATION
+#undef RANXOSHI256_IMPLEMENTATION
 
 //function declarations
-static inline uint64_t ranxoshi256Rotate(uint64_t, int);
+static uint64_t ranxoshi256Rotate(uint64_t, int);
 
 //public functions
 RSHI256DEF void ranxoshi256Seed (struct ranxoshi256* ctx, const unsigned char s[32]) {
@@ -86,8 +89,8 @@ RSHI256DEF double ranxoshi256DoubleCC (struct ranxoshi256* ctx) {
     return (double)ranxoshi256Next(ctx)/(double)UINT64_MAX;
 }
 RSHI256DEF uint64_t ranxoshi256Next (struct ranxoshi256* ctx) {
-	const uint64_t res = ranxoshi256Rotate(ctx->s[1] * 5, 7) * 9;
-	const uint64_t t = ctx->s[1] << 17;
+	uint64_t res = ranxoshi256Rotate(ctx->s[1] * 5, 7) * 9;
+	uint64_t t = ctx->s[1] << 17;
 	ctx->s[2] ^= ctx->s[0];
 	ctx->s[3] ^= ctx->s[1];
 	ctx->s[1] ^= ctx->s[2];
@@ -97,7 +100,7 @@ RSHI256DEF uint64_t ranxoshi256Next (struct ranxoshi256* ctx) {
 	return res;
 }
 RSHI256DEF void ranxoshi256Jump (struct ranxoshi256* ctx) {
-    static const uint64_t jump[] = {0x180EC6D33CFD0ABA, 0xD5A61266F0C9392C, 0xA9582618E03FC9AA, 0x39ABDC4529B1661C};
+    const uint64_t jump[] = {0x180EC6D33CFD0ABA, 0xD5A61266F0C9392C, 0xA9582618E03FC9AA, 0x39ABDC4529B1661C};
 	uint64_t s0 = 0, s1 = 0, s2 = 0, s3 = 0;
 	for (int i = 0; i < sizeof(jump)/sizeof(jump[0]); i++)
 		for (int b = 0; b < 64; b++) {
@@ -121,4 +124,3 @@ static uint64_t ranxoshi256Rotate (uint64_t x, int k) {
 }
 
 #endif //RANXOSHI256_IMPLEMENTATION
-#endif //RANXOSHI256_H
